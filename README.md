@@ -38,4 +38,4 @@ To run the application, use the following command:
 
 For testing on a virtual or physical Android device, it's recommended to install [Android Studio](https://developer.android.com/studio).
 
-**Caution:** Always ensure you download software from the official sites provided. Avoid using other sources to download the Flutter SDK or any dependencies, as this could compromise your system's security.
+**Caution:** Always ensure you download software from the official sites provided.
