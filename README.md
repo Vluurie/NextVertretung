@@ -39,3 +39,27 @@ To run the application, use the following command:
 For testing on a virtual or physical Android device, it's recommended to install [Android Studio](https://developer.android.com/studio).
 
 **Caution:** Always ensure you download software from the official sites provided.
+
+# Important Notice on Downloading Compiled Versions
+
+For your safety and the integrity of your system, it is crucial that you adhere to the guidelines provided here when downloading compiled versions of this application.
+
+## Official Download URL
+
+**Please download the official compiled version of the application only from this designated download site:**
+
+[Official Download Site](https://nextvertretung-download.netlify.app/)
+
+## Caution
+
+**Beware of Unofficial Sources:**
+
+- **Security Risks**: Downloading compiled applications from unofficial sources can expose you to security vulnerabilities, malware, and potentially harmful software.
+- **Updates and Patches**: Only the official site will have the most current updates and patches. Using versions from other sources may result in software conflicts or outdated functionalities.
+
+## How to Verify You Are on the Official Site
+
+1. **Check the URL**: Always check the URL in the address bar of your browser to confirm it matches the official URL provided above.
+2. **Avoid Suspicious Links**: Do not click on unsolicited links in emails or messages. Always navigate directly to the official download site using the URL provided.
+
+**Note**: By downloading the application from the official link provided, you agree to our terms of service and acknowledge having read our privacy policy.
