@@ -13,6 +13,7 @@ import 'package:next_cloud_plans/ui/pages/child_ui/date_dropdown.dart';
 import 'package:next_cloud_plans/ui/pages/child_ui/logout_button.dart';
 import 'package:next_cloud_plans/ui/pages/child_ui/plan_by_date.dart';
 import 'package:next_cloud_plans/ui/pages/login_page.dart';
+import 'package:next_cloud_plans/ui/pages/pdf_view_page.dart';
 
 import 'package:next_cloud_plans/ui/pages/search_page.dart';
 import 'package:next_cloud_plans/utils/storage.dart';
@@ -137,6 +138,14 @@ class SubstitutionPlanState extends State<SubstitutionPlan> {
             child: IconButton(
                 icon: const Icon(Icons.refresh), onPressed: _handleRefresh),
           ),
+          Padding(
+              padding: const EdgeInsets.only(right: 10.0),
+              child: IconButton(
+                icon: const Icon(Icons.picture_as_pdf),
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const PDFViewPage()),
+                ),
+              )),
           ConfirmLogoutButton(userRepository: userRepository)
         ],
       ),
