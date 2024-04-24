@@ -16,7 +16,11 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
-  await initWorkManager();
+  StorageItems storageItems = StorageItems();
+  bool? isNotificationEnabled = await storageItems.getNotificationBool();
+  if (isNotificationEnabled == true) {
+    await initWorkManager();
+  }
   runApp(const NextVertretung());
 }
 
@@ -36,6 +40,10 @@ Future<void> initWorkManager() async {
   );
 
   await checkNotificationPermissionInit();
+}
+
+Future<void> cancelWorkManagerTasks() async {
+  await Workmanager().cancelAll();
 }
 
 Future<void> checkNotificationPermissionInit() async {

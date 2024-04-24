@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:next_cloud_plans/main.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
@@ -63,12 +64,13 @@ class NotificationService {
 
     if (!isNotificationEnabled) {
       await prefs.setBool('isNotificationEnabled', true);
-      await initNotification();
+      await initWorkManager();
     } else {
       if (context.mounted) {
         bool result = await _showDisableNotificationDialog(context);
         if (result) {
           await prefs.setBool('isNotificationEnabled', false);
+          await cancelWorkManagerTasks();
         }
       }
     }
