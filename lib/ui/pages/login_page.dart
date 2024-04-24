@@ -9,6 +9,7 @@ import 'package:next_cloud_plans/database/database.dart';
 import 'package:next_cloud_plans/model/substitution_plan.dart';
 import 'package:next_cloud_plans/repository/user_repository.dart';
 import 'package:next_cloud_plans/ui/pages/child_ui/custom_button.dart';
+import 'package:next_cloud_plans/ui/pages/child_ui/password_field.dart';
 import 'package:next_cloud_plans/ui/pages/hints/snackbar.dart';
 import 'package:next_cloud_plans/ui/pages/search_page.dart';
 import 'package:next_cloud_plans/ui/pages/substitution_plan_page.dart';
@@ -160,18 +161,7 @@ class LoginPageState extends State<LoginPage> {
                             return null;
                           },
                         ),
-                        TextFormField(
-                          controller: _passwordController,
-                          obscureText: true,
-                          decoration:
-                              const InputDecoration(labelText: 'Password'),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter your password';
-                            }
-                            return null;
-                          },
-                        ),
+                        PasswordField(controller: _passwordController),
                         Padding(
                           padding: const EdgeInsets.only(top: 20.0),
                           child: CustomElevatedButton(
