@@ -27,10 +27,6 @@ class _DateDropdownState extends State<DateDropdown> {
   @override
   void initState() {
     super.initState();
-    if (widget.uniqueDates.isNotEmpty) {
-      selectedDate = widget.uniqueDates.first;
-      widget.onDateChanged(selectedDate!);
-    }
   }
 
   void _showBottomSheet(BuildContext context) {
@@ -93,6 +89,7 @@ class _DateDropdownState extends State<DateDropdown> {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) => updateDateSelection());
     var textStyle = TextStyle(
         color: Colors.white,
         fontSize: MediaQuery.of(context).size.width * 0.04);
@@ -127,7 +124,9 @@ class _DateDropdownState extends State<DateDropdown> {
                               "Wähle ein Datum"
                           : "Keine lokalen Pläne gefunden",
                       style: textStyle),
-                  const Icon(Icons.arrow_drop_down, color: Colors.white),
+                  if (widget
+                      .uniqueDates.isNotEmpty) //  display icon only ifNotEmpty
+                    const Icon(Icons.arrow_drop_down, color: Colors.white),
                 ],
               ),
             ),
@@ -144,5 +143,15 @@ class _DateDropdownState extends State<DateDropdown> {
         ],
       ),
     );
+  }
+
+// fix method for instead of on init, select after rebuild of the widget the last plan
+  void updateDateSelection() {
+    if (widget.uniqueDates.isNotEmpty && selectedDate == null) {
+      setState(() {
+        selectedDate = widget.uniqueDates.last;
+        widget.onDateChanged(selectedDate!);
+      });
+    }
   }
 }

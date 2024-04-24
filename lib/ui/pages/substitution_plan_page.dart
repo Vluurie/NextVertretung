@@ -8,6 +8,7 @@ import 'package:next_cloud_plans/model/substitution_plan.dart';
 import 'package:next_cloud_plans/repository/user_repository.dart';
 import 'package:next_cloud_plans/ui/pages/child_ui/all_classes_selection.dart';
 import 'package:next_cloud_plans/ui/pages/child_ui/class_title.dart';
+import 'package:next_cloud_plans/ui/pages/child_ui/custom_button.dart';
 import 'package:next_cloud_plans/ui/pages/child_ui/date_dropdown.dart';
 import 'package:next_cloud_plans/ui/pages/child_ui/logout_button.dart';
 import 'package:next_cloud_plans/ui/pages/child_ui/plan_by_date.dart';
@@ -80,6 +81,14 @@ class SubstitutionPlanState extends State<SubstitutionPlan> {
         selectedDate = null;
         pastPlans = [];
       });
+    }
+  }
+
+  Future<void> _handlePlanClear() async {
+    await DatabaseHelper.instance.clearAllPlans();
+    if (mounted) {
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const LoginPage()));
     }
   }
 
@@ -169,7 +178,19 @@ class SubstitutionPlanState extends State<SubstitutionPlan> {
                     child: allClassesSection(
                         widget.allPlanData, widget.apiService, context),
                   ),
-                  title("Alte Vertretungspläne", context),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Expanded(
+                        child: title("Alte Vertretungspläne", context),
+                      ),
+                      DeletablePlansButton(
+                        onDeleteConfirmed: () {
+                          _handlePlanClear();
+                        },
+                      ),
+                    ],
+                  ),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.6,
                     child: DateDropdown(
