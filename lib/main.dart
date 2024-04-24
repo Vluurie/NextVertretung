@@ -50,6 +50,7 @@ Future<void> checkNotificationPermissionInit() async {
 void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
     try {
+      await dotenv.load(fileName: ".env");
       const storage = FlutterSecureStorage();
       final apiService = ApiService(storage: storage);
       final dbHelper = DatabaseHelper.instance;

@@ -24,7 +24,7 @@ class PasswordFieldState extends State<PasswordField> {
       controller: widget.controller,
       obscureText: _obscureText,
       decoration: InputDecoration(
-        labelText: 'Password',
+        labelText: 'App-Password',
         suffixIcon: GestureDetector(
           onLongPressStart: (_) => _toggleVisibility(true),
           onLongPressEnd: (_) => _toggleVisibility(false),
