@@ -26,16 +26,17 @@ class DatabaseHelper {
   Future _createDB(Database db, int version) async {
     await db.execute('''
     CREATE TABLE IF NOT EXISTS plans (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      date TEXT NOT NULL,
-      hour TEXT NOT NULL,
-      action TEXT NOT NULL,
-      teacher TEXT NOT NULL,
-      hash TEXT
-    )
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  date TEXT NOT NULL,
+  hour TEXT NOT NULL,
+  action TEXT NOT NULL,
+  teacher TEXT NOT NULL,
+  className TEXT NOT NULL,
+  hash TEXT
+)
   ''');
     await db.execute('''
-    CREATE UNIQUE INDEX idx_uniqueness ON plans (date, hour, action, teacher);
+    CREATE UNIQUE INDEX idx_uniqueness ON plans (className, date, hour, action, teacher);
   ''');
   }
 
@@ -45,26 +46,29 @@ class DatabaseHelper {
     debugPrint('All plans have been deleted from the database.');
   }
 
-  Future<void> insertOrUpdatePlan(
-      String date, List<SubstitutionPlanItem> newPlans) async {
+  Future<void> insertOrUpdatePlan(String date,
+      List<SubstitutionPlanItem> newPlans, String className) async {
     final db = await database;
 
     await db.transaction((txn) async {
-      // Fetch all current plans for the specific date to compare
-      List<Map<String, dynamic>> currentPlans =
-          await txn.query('plans', where: 'date = ?', whereArgs: [date]);
+      // Fetch all current plans for the specific date and class to compare
+      List<Map<String, dynamic>> currentPlans = await txn.query('plans',
+          where: 'date = ? AND className = ?', whereArgs: [date, className]);
 
       // Convert current plans to a map keyed by a composite of identifiers
       Map<String, Map<String, dynamic>> currentPlansMap = {
         for (var plan in currentPlans)
-          '${plan['hour']}-${plan['action']}-${plan['teacher']}': plan
+          '${plan['hour']}-${plan['action']}-${plan['teacher']}-${plan['className']}':
+              plan
       };
 
       for (var newPlan in newPlans) {
         var jsonData = newPlan.toJson();
-        jsonData['date'] = date; // Ensure the 'date' is explicitly set
+        jsonData['date'] = date;
+        jsonData['className'] = className;
 
-        String key = '${newPlan.hour}-${newPlan.action}-${newPlan.teacher}';
+        String key =
+            '${newPlan.hour}-${newPlan.action}-${newPlan.teacher}-$className';
         var existingPlan = currentPlansMap[key];
 
         // Log the decision process
@@ -87,39 +91,40 @@ class DatabaseHelper {
       }
 
       // Confirm changes by fetching the updated data
-      List<Map<String, dynamic>> updatedRows =
-          await txn.query('plans', where: 'date = ?', whereArgs: [date]);
+      List<Map<String, dynamic>> updatedRows = await txn.query('plans',
+          where: 'date = ? AND className = ?', whereArgs: [date, className]);
       debugPrint(
-          'Post-operation state for date $date: ${updatedRows.map((row) => row.toString()).join(", ")}');
+          'Post-operation state for date $date and class $className: ${updatedRows.map((row) => row.toString()).join(", ")}');
     });
     debugPrint('Database transaction completed.');
   }
 
 // Helper method to fetch all plans within a transaction
   Future<List<SubstitutionPlanItem>> fetchAllPlansTxn(Transaction txn) async {
-    final maps = await txn
-        .query('plans', columns: ['hour', 'action', 'teacher', 'date']);
+    final maps = await txn.query('plans',
+        columns: ['className', 'hour', 'action', 'teacher', 'date']);
     return maps.isNotEmpty
         ? maps.map((map) => SubstitutionPlanItem.fromJson(map)).toList()
         : [];
   }
 
-  Future<List<SubstitutionPlanItem>> fetchPlansByDate(String date) async {
+  Future<List<SubstitutionPlanItem>> fetchPlansByDate(
+      String date, String className) async {
     final db = await instance.database;
     final maps = await db.query('plans',
-        columns: ['hour', 'action', 'teacher'],
-        where: 'date = ?',
-        whereArgs: [date]);
+        columns: ['hour', 'action', 'teacher', 'className'],
+        where: 'date = ? AND className = ?',
+        whereArgs: [date, className]);
 
-    if (maps.isNotEmpty) {
-      return maps.map((map) => SubstitutionPlanItem.fromJson(map)).toList();
-    }
-    return [];
+    return maps.isNotEmpty
+        ? maps.map((map) => SubstitutionPlanItem.fromJson(map)).toList()
+        : [];
   }
 
-  Future<bool> compareFetchedData(
-      String date, List<SubstitutionPlanItem> newPlans) async {
-    final List<SubstitutionPlanItem> oldPlans = await fetchPlansByDate(date);
+  Future<bool> compareFetchedData(String date,
+      List<SubstitutionPlanItem> newPlans, String className) async {
+    final List<SubstitutionPlanItem> oldPlans =
+        await fetchPlansByDate(date, className);
 
     if (oldPlans.length != newPlans.length) {
       debugPrint(

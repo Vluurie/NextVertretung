@@ -58,7 +58,7 @@ class UpdateChecker {
         String date = entry.key;
         List<SubstitutionPlanItem> fetchedPlans = entry.value;
         List<SubstitutionPlanItem> existingPlans =
-            await _databaseHelper.fetchPlansByDate(date);
+            await _databaseHelper.fetchPlansByDate(date, searchText);
 
         for (var fetchedPlan in fetchedPlans) {
           var fetchedHash = fetchedPlan.generateHash();
@@ -78,7 +78,8 @@ class UpdateChecker {
               existingPlan.generateHash() != fetchedHash) {
             debugPrint(
                 "Change detected for date $date in single class. Updating database...");
-            await _databaseHelper.insertOrUpdatePlan(date, fetchedPlans);
+            await _databaseHelper.insertOrUpdatePlan(
+                date, fetchedPlans, searchText);
             hasChanges = true;
             break; // Exit the loop after finding the first change
           }

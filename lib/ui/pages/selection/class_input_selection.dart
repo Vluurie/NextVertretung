@@ -155,11 +155,11 @@ class ClassInputPageState extends State<ClassInputPage> {
 
       for (var entry in resultSingle.entries) {
         await DatabaseHelper.instance
-            .insertOrUpdatePlan(entry.key, entry.value);
+            .insertOrUpdatePlan(entry.key, entry.value, _selectedClass!);
       }
       for (var entry in resultAll.entries) {
         await DatabaseHelper.instance
-            .insertOrUpdatePlan(entry.key, entry.value);
+            .insertOrUpdatePlan(entry.key, entry.value, _selectedClass!);
       }
 
       if (resultSingle.isNotEmpty || resultAll.isNotEmpty) {

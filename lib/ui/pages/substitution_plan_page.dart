@@ -98,7 +98,8 @@ class SubstitutionPlanState extends State<SubstitutionPlan> {
   }
 
   Future<void> _loadPastPlans(String date) async {
-    pastPlans = await DatabaseHelper.instance.fetchPlansByDate(date);
+    pastPlans = await DatabaseHelper.instance
+        .fetchPlansByDate(date, widget.currentClass);
     setState(() {});
   }
 

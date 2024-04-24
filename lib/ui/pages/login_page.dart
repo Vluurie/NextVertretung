@@ -79,11 +79,11 @@ class LoginPageState extends State<LoginPage> {
       if (singlePlanData.isNotEmpty || allPlanData.isNotEmpty) {
         for (var entry in singlePlanData.entries) {
           await DatabaseHelper.instance
-              .insertOrUpdatePlan(entry.key, entry.value);
+              .insertOrUpdatePlan(entry.key, entry.value, className);
         }
         for (var entry in allPlanData.entries) {
           await DatabaseHelper.instance
-              .insertOrUpdatePlan(entry.key, entry.value);
+              .insertOrUpdatePlan(entry.key, entry.value, className);
         }
         if (mounted) {
           Navigator.pushReplacement(
