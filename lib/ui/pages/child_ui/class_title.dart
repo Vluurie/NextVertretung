@@ -59,9 +59,9 @@ Widget title(String title, BuildContext context) {
         children: [
           Icon(Icons.calendar_month,
               color: isDarkMode ? Colors.white : Colors.black54),
-          const SizedBox(width: 10),
+          const SizedBox(width: 8),
           Text(title,
-              style: theme.textTheme.titleLarge
+              style: theme.textTheme.titleMedium
                   ?.copyWith(color: isDarkMode ? Colors.white : Colors.black)),
         ],
       ),

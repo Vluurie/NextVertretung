@@ -86,10 +86,13 @@ class PDFViewerComponentState extends State<PDFViewerComponent> {
         ],
       ),
       body: localPath == null
-          ? Center(
-              child: CustomElevatedButton(
-                label: 'PDF Stundenplan auswählen und speichern',
-                onPressed: pickAndSavePDF,
+          ? Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(
+                child: CustomElevatedButton(
+                  label: 'PDF Stundenplan auswählen und speichern',
+                  onPressed: pickAndSavePDF,
+                ),
               ),
             )
           : PDFView(

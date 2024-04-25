@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 class PasswordField extends StatefulWidget {
@@ -11,11 +13,28 @@ class PasswordField extends StatefulWidget {
 
 class PasswordFieldState extends State<PasswordField> {
   bool _obscureText = true;
+  Timer? _timer;
 
-  void _toggleVisibility(bool visible) {
+  void _toggleVisibility() {
+    if (!_obscureText) return;
     setState(() {
-      _obscureText = !visible;
+      _obscureText = false;
     });
+
+    _timer?.cancel();
+    _timer = Timer(const Duration(seconds: 3), () {
+      if (mounted) {
+        setState(() {
+          _obscureText = true;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 
   @override
@@ -26,8 +45,7 @@ class PasswordFieldState extends State<PasswordField> {
       decoration: InputDecoration(
         labelText: 'App-Password',
         suffixIcon: GestureDetector(
-          onLongPressStart: (_) => _toggleVisibility(true),
-          onLongPressEnd: (_) => _toggleVisibility(false),
+          onTap: _toggleVisibility,
           child: Icon(
             _obscureText ? Icons.visibility : Icons.visibility_off,
           ),
